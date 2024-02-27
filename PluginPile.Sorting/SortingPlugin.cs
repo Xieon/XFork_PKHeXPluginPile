@@ -25,7 +25,7 @@ public class SortingPlugin : PluginBase {
     SortByButton.Text = Language.MenuItemName;
     SortByButton.DropDownItems.Clear();
     ToolStripItemCollection sortItems = SortByButton.DropDownItems;
-    int gen = SaveFileEditor.SAV.Generation;
+    byte gen = SaveFileEditor.SAV.Generation;
     GameVersion version = SaveFileEditor.SAV.Version;
     bool isLetsGo = version == GameVersion.GP || version == GameVersion.GE;
     if (isLetsGo) {
@@ -182,9 +182,9 @@ public class SortingPlugin : PluginBase {
   protected override void LoadContextMenu(ContextMenuStrip contextMenu) {
     contextMenu.Opening += (s, e) => {
       SlotViewInfo<PictureBox> info = GetSenderInfo(ref s!);
-      if (info.IsNonEmptyWriteableBoxSlot()) {
+      if (info.IsNonEmptyWriteableBoxSlot() && !SaveFileEditor.SAV.IsSlotOverwriteProtected(info.View.ViewIndex, info.Slot.Slot)) {
         ToolStripMenuItem insertSlotButton = new ToolStripMenuItem(Language.InsertSlot);
-        insertSlotButton.Click += (s, e) => InsertSlot(SaveFileEditor.CurrentBox, info.Slot.Slot);
+        insertSlotButton.Click += (s, e) => InsertSlot(info.View.ViewIndex, info.Slot.Slot);
         contextMenu.Items.Add(insertSlotButton);
         contextMenu.Closing += (s, e) => contextMenu.Items.Remove(insertSlotButton);
       }
