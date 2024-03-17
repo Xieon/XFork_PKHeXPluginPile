@@ -1,6 +1,6 @@
 using PKHeX.Core;
 
-namespace PluginPile.Common; 
+namespace PluginPile.Common;
 public static class SlotViewInfoExtensions {
   public static bool IsNonEmptyWriteableBoxSlot(this SlotViewInfo<PictureBox> info) {
     return info.Slot.Origin == SlotOrigin.Box && info.ReadCurrent().Species != (int)Species.None && info.CanWriteTo();
@@ -11,8 +11,11 @@ public static class SlotViewInfoExtensions {
       case SlotOrigin.Party:
         return sav.GetPartySlotAtIndex(info.Slot.Slot);
       case SlotOrigin.Box:
-        int slotIndex = info.View.ViewIndex * sav.BoxSlotCount + info.Slot.Slot;
-        return sav.GetBoxSlotAtIndex(slotIndex);
+        if (info.View.ViewIndex >= 0) {
+          int slotIndex = info.View.ViewIndex * sav.BoxSlotCount + info.Slot.Slot;
+          return sav.GetBoxSlotAtIndex(slotIndex);
+        }
+        return sav.BlankPKM;
       default:
         return sav.BlankPKM;
     }

@@ -1,7 +1,7 @@
 using PKHeX.Core;
 using System.Reflection;
 
-namespace PluginPile.Common; 
+namespace PluginPile.Common;
 public abstract class PluginBase : IPlugin {
   public abstract string Name { get; }
   public virtual int Priority => 1; // Loading order, lowest is first.
@@ -56,7 +56,7 @@ public abstract class PluginBase : IPlugin {
     Type contextMenuSAVType = ((dynamic)SaveFileEditor).menu.GetType();
     MethodInfo getSenderInfoMethod = contextMenuSAVType.GetMethods(BindingFlags.NonPublic | BindingFlags.Static)
       .Single(m => m.Name.Contains("GetSenderInfo"));
-    return (SlotViewInfo<PictureBox>)getSenderInfoMethod.Invoke(null, new object[] { sender })!;
+    return (SlotViewInfo<PictureBox>)getSenderInfoMethod.Invoke(null, [sender])!;
   }
 
   protected BoxManipulator GetBoxManipulatorWF() {
